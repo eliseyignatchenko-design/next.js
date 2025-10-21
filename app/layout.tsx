@@ -30,6 +30,7 @@ export default function RootLayout({
       ><nav>
     <Link href="/">Home</Link>
     <Link href="/about">About</Link>
+    <Link href="/users">UsersTable</Link>
       </nav>
         {children}
       </body>
