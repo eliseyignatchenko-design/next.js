@@ -10,7 +10,7 @@ interface User {
   createdAt: string;
 }
 
-const MOCK_API_URL = "https://68f62aca6b852b1d6f1645db.mockapi.io/api/users"; 
+const MOCK_API_URL = "https://68f62aca6b852b1d6f1645db.mockapi.io/users"; 
 
 async function getUsers(): Promise<User[]> {
   try {
