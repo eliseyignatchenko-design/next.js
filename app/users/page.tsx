@@ -2,9 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import "./table.css";
-import DeleteUserButton from "./delete-user-button";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface User {
   id: string;
@@ -19,7 +27,6 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
 
   useEffect(() => {
     async function fetchUsers() {
@@ -39,11 +46,10 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
- 
   const handleDelete = async (id: string) => {
     try {
       await fetch(`${MOCK_API_URL}/${id}`, { method: "DELETE" });
-      setUsers((prev) => prev.filter((u) => u.id !== id)); 
+      setUsers((prev) => prev.filter((u) => u.id !== id));
     } catch (err) {
       console.error("Ошибка при удалении:", err);
       alert("Не удалось удалить пользователя.");
@@ -59,8 +65,10 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6 text-center">Список Пользователей</h1>
+    <div className="container mx-auto">
+      <h1 className="text font-bold  text-center">
+        Список Пользователей
+      </h1>
 
       <table className="users-table">
         <thead>
@@ -75,7 +83,11 @@ export default function UsersPage() {
           {users.map((user) => (
             <tr key={user.id} className="fade-in">
               <td className="text-center">
-                <img src={user.avatar} alt={user.name} className="user-avatar" />
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="user-avatar"
+                />
               </td>
               <td>{user.name}</td>
               <td>
@@ -88,11 +100,27 @@ export default function UsersPage() {
                 })}
               </td>
               <td>
-                <DeleteUserButton
-                  userId={user.id}
-                  userName={user.name}
-                  onDelete={handleDelete}
-                />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="destructive">Удалить</Button>
+                  </DialogTrigger>
+
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogTitle>Удалить пользователя?</DialogTitle>
+                    <DialogDescription>
+                      Це дія є незворотною. Ви впевнені, що хочете видалити
+                      користувача <strong>{user.name}</strong>?
+                    </DialogDescription>
+                    <DialogHeader>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Видалити
+                      </Button>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </td>
             </tr>
           ))}
